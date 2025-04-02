@@ -84,7 +84,7 @@ if __name__ == "__main__":
         else:
             download_weights(phi)
 
-    model   = MRHF(num_classes=num_classes)
+    model   = MRHF.HRHF_NET(num_classes=num_classes)
     
     if local_rank == 0:
         time_str        = datetime.datetime.strftime(datetime.datetime.now(),'%Y_%m_%d_%H_%M_%S')
