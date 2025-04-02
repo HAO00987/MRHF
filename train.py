@@ -34,7 +34,6 @@ if __name__ == "__main__":
     sync_bn         = False
     fp16            = False
     num_classes     = 7
-    phi             = "b1"
     pretrained      = True
     model_path      = ""
     input_shape     = [512, 512]
@@ -76,15 +75,8 @@ if __name__ == "__main__":
         device          = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         local_rank      = 0
 
-    if pretrained:
-        if distributed:
-            if local_rank == 0:
-                download_weights(phi)  
-            dist.barrier()
-        else:
-            download_weights(phi)
 
-    model   = MRHF.HRHF_NET(num_classes=num_classes)
+    model   = MRHF(num_classes=num_classes)
     
     if local_rank == 0:
         time_str        = datetime.datetime.strftime(datetime.datetime.now(),'%Y_%m_%d_%H_%M_%S')
@@ -123,7 +115,7 @@ if __name__ == "__main__":
 
     if local_rank == 0:
         show_config(
-            num_classes = num_classes, phi = phi, model_path = model_path, input_shape = input_shape, \
+            num_classes = num_classes, model_path = model_path, input_shape = input_shape, \
             Init_Epoch = Init_Epoch, Freeze_Epoch = Freeze_Epoch, UnFreeze_Epoch = UnFreeze_Epoch, Freeze_batch_size = Freeze_batch_size, Unfreeze_batch_size = Unfreeze_batch_size, Freeze_Train = Freeze_Train, \
             Init_lr = Init_lr, Min_lr = Min_lr, optimizer_type = optimizer_type, momentum = momentum, lr_decay_type = lr_decay_type, \
             save_period = save_period, save_dir = save_dir, num_workers = num_workers, num_train = num_train, num_val = num_val
